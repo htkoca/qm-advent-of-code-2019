@@ -16,7 +16,7 @@ function computeProgram(arr){
   const rslt = [...arr];
   let idx = 0;
   while (idx < rslt.length) {
-    const [op, pos1, pos2, pos3] = [rslt[idx], rslt[idx+1], rslt[idx+1], rslt[idx+3]]
+    const [op, pos1, pos2, pos3] = [rslt[idx], rslt[idx+1], rslt[idx+2], rslt[idx+3]]
     if (op === 1) {
       rslt[pos3] = rslt[pos1] + rslt[pos2]
     } else if (op === 2) {
