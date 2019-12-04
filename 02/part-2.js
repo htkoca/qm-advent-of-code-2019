@@ -5,13 +5,6 @@ function getInputArr(text) {
   return text.replace(/\n+$/, '').split(/,\s?/).map((str) => parseInt(str, 10))
 }
 
-function restoreSavedValues(arr){
-  const rslt = [...arr];
-  rslt[1] = 12;
-  rslt[2] = 2;
-  return rslt;
-}
-
 function computeProgram(arr) {
   const prog = [...arr];
   let address = 0;
@@ -33,10 +26,27 @@ function computeProgram(arr) {
   return prog;
 };
 
+
+function findProgramMatch(arr, target) {
+  const rangeArr = Array.from({length: 100});
+  let rslt;
+  rangeArr.some((val, noun) => {
+    return rangeArr.some((val, verb) => {
+      const curArr = [...arr];
+      curArr[1] = noun;
+      curArr[2] = verb;
+      rslt = computeProgram(curArr);
+      return rslt[0] === target;
+    });
+  });
+  return rslt;
+}
+
+
 readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   if (err) throw err;
   const arr = getInputArr(data);
-  const arrSavedValues = restoreSavedValues(arr);
-  const rslt = computeProgram(arrSavedValues);
-  console.log('[02 - Part 2] Solution:', rslt[0]);
+  const match = findProgramMatch(arr, 19690720)
+  const rslt = 100 * match[1] + match[2];
+  console.log('[02 - Part 2] Solution:', rslt);
 });
