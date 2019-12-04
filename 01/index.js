@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import { readFile } from 'fs';
+import { join } from 'path';
 
 function getInputArr(text) {
   return text.replace(/\n+$/, '').split('\n').map((val) => parseInt(val, 10));
@@ -18,7 +18,7 @@ function computeTotalFuelMass(arr){
   return arr.map(recurseFuelMass).reduce((sum, val) => sum + val, 0);
 }
 
-fs.readFile(path.join(__dirname, 'input.txt'), 'utf8', (err, data) => {
+readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   if (err) throw err;
   const arr = getInputArr(data);
   const rslt = computeTotalFuelMass(arr);

@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import { readFile } from 'fs';
+import { join } from 'path';
 
 function getInputArr(text) {
   return text.replace(/\n+$/, '').split(/,\s?/).map((str) => parseInt(str, 10))
@@ -29,7 +29,7 @@ function computeProgram(arr){
   return rslt;
 }
 
-fs.readFile(path.join(__dirname, 'input.txt'), 'utf8', (err, data) => {
+readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   if (err) throw err;
   const arr = getInputArr(data);
   const arrSavedValues = restoreSavedValues(arr);
