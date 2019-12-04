@@ -2,7 +2,7 @@ import { readFile } from 'fs';
 import { join } from 'path';
 
 function getInputArr(text) {
-  return text.replace(/\n+$/, '').split(/,\s?/).map((str) => parseInt(str, 10))
+  return text.replace(/\n+$/, '').split(/,\s?/).map((str) => parseInt(str, 10));
 }
 
 function restoreSavedValues(arr){
