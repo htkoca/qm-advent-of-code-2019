@@ -6,14 +6,14 @@ function getInputArr(text) {
 }
 
 function restoreSavedValues(arr){
-  const rslt = [...data];
+  const rslt = [...arr];
   rslt[1] = 12;
   rslt[2] = 2;
   return rslt;
 }
 
-function computeProgram(data){
-  const rslt = [...data];
+function computeProgram(arr){
+  const rslt = [...arr];
   let idx = 0;
   while (idx < rslt.length) {
     const [op, pos1, pos2, pos3] = [rslt[idx], rslt[idx+1], rslt[idx+1], rslt[idx+3]]
@@ -34,5 +34,5 @@ fs.readFile(path.join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   const arr = getInputArr(data);
   const arrSavedValues = restoreSavedValues(arr);
   const rslt = computeProgram(arrSavedValues);
-  console.log('[1.2] Solution:', rslt[0]);
+  console.log('[2.1] Solution:', rslt[0]);
 });
