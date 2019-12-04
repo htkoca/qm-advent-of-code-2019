@@ -1,0 +1,37 @@
+{
+  "name": "qm-advent-of-code-2019",
+  "author": "Tony Ko",
+  "version": "1.0.0",
+  "license": "ISC",
+  "description": "JS solutions for advent of code 2019",
+  "keywords": [],
+  "gallery": [],
+  "homepage": "https://github.com/htkoca/qm-advent-of-code-2019#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/htkoca/qm-advent-of-code-2019.git"
+  },
+  "bugs": {
+    "url": "https://github.com/htkoca/qm-advent-of-code-2019/issues"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "babel-node ./index.js",
+    "dev": "clear; nodemon --exec babel-node ./index.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.1",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.18.2"
+  },
+  "dependencies": {}
+}
