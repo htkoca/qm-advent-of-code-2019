@@ -37,5 +37,5 @@ readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   const arr = getInputArr(data);
   const arrSavedValues = restoreSavedValues(arr);
   const rslt = computeProgram(arrSavedValues);
-  console.log('[2.1] Solution:', rslt[0]);
+  console.log('[02 - Part 2] Solution:', rslt[0]);
 });
