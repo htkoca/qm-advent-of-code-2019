@@ -14,20 +14,21 @@ function restoreSavedValues(arr){
 
 function computeProgram(arr) {
   const prog = [...arr];
-  let idx = 0;
-  while (idx < prog.length) {
-    switch (prog[idx]) {
+  let address = 0;
+  while (address < prog.length) {
+    switch (prog[address]) {
       case 1:
-        prog[prog[idx+3]] = prog[prog[idx+1]] + prog[prog[idx+2]]
+        prog[prog[address+3]] = prog[prog[address+1]] + prog[prog[address+2]]
+        address += 4;
         break;
       case 2:
-        prog[prog[idx+3]] = prog[prog[idx+1]] * prog[prog[idx+2]]
+        prog[prog[address+3]] = prog[prog[address+1]] * prog[prog[address+2]]
+        address += 4;
         break;
       case 99:
-        idx = prog.length
+        address = prog.length
         break;
     }
-    idx += 4;
   }
   return prog;
 };
