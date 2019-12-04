@@ -12,22 +12,25 @@ function restoreSavedValues(arr){
   return rslt;
 }
 
-function computeProgram(arr){
-  const rslt = [...arr];
+function computeProgram(arr) {
+  const prog = [...arr];
   let idx = 0;
-  while (idx < rslt.length) {
-    const [op, pos1, pos2, pos3] = [rslt[idx], rslt[idx+1], rslt[idx+2], rslt[idx+3]]
-    if (op === 1) {
-      rslt[pos3] = rslt[pos1] + rslt[pos2]
-    } else if (op === 2) {
-      rslt[pos3] = rslt[pos1] * rslt[pos2]
-    } else if (op === 99) {
-      break;
+  while (idx < prog.length) {
+    switch (prog[idx]) {
+      case 1:
+        prog[prog[idx+3]] = prog[prog[idx+1]] + prog[prog[idx+2]]
+        break;
+      case 2:
+        prog[prog[idx+3]] = prog[prog[idx+1]] * prog[prog[idx+2]]
+        break;
+      case 99:
+        idx = prog.length
+        break;
     }
     idx += 4;
   }
-  return rslt;
-}
+  return prog;
+};
 
 readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   if (err) throw err;
