@@ -5,11 +5,16 @@ function getInputArr(text) {
   return text.replace(/\n+$/, '').split(/,\s?/).map((str) => parseInt(str, 10))
 }
 
-function getSolution(data){
-  let idx = 0;
+function restoreSavedValues(arr){
   const rslt = [...data];
   rslt[1] = 12;
   rslt[2] = 2;
+  return rslt;
+}
+
+function computeProgram(data){
+  const rslt = [...data];
+  let idx = 0;
   while (idx < rslt.length) {
     const [op, pos1, pos2, pos3] = [rslt[idx], rslt[idx+1], rslt[idx+1], rslt[idx+3]]
     if (op === 1) {
@@ -27,6 +32,7 @@ function getSolution(data){
 fs.readFile(path.join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   if (err) throw err;
   const arr = getInputArr(data);
-  const rslt = getSolution(arr);
+  const arrSavedValues = restoreSavedValues(arr);
+  const rslt = computeProgram(arrSavedValues);
   console.log('[1.2] Solution:', rslt[0]);
 });

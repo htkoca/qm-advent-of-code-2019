@@ -14,13 +14,13 @@ function recurseFuelMass(mass){
   return fuel > 0 ? fuel + recurseFuelMass(fuel) : 0;
 }
 
-function getSolution(arr){
+function computeTotalFuelMass(arr){
   return arr.map(recurseFuelMass).reduce((sum, val) => sum + val, 0);
 }
 
 fs.readFile(path.join(__dirname, 'input.txt'), 'utf8', (err, data) => {
   if (err) throw err;
   const arr = getInputArr(data);
-  const rslt = getSolution(arr);
+  const rslt = computeTotalFuelMass(arr);
   console.log('[1.2] Solution:', rslt);
 });
