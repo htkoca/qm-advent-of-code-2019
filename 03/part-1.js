@@ -23,6 +23,10 @@ Vector.prototype = {
   },
   subtract: function(v) {
     return new Vector(this.x - v.x, this.y - v.y);
+  },
+  manhattanDist: function(v) {
+    const local = this.subtract(v);
+    return Math.abs(local.x) + Math.abs(local.y);
   }
 };
 
