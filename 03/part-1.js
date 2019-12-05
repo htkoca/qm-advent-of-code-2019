@@ -73,7 +73,7 @@ export function getSolution(err, data) {
   const vectorSets = getLocalVectors(codeSets);
   const coordSets = getAbsoluteCoords(vectorSets, new Vector(0, 0));
   const intersects = getIntersects(coordSets);
-  const closestIntersect = getClosestIntersects(intersects);
+  const closestIntersect = getClosestIntersect(intersects);
   console.log('[03 - Part 1] Solution:', closestIntersect);
 }
 
