@@ -1,18 +1,30 @@
 import { readFile } from 'fs';
 import { join } from 'path';
 
-function getInputArr(text) {
+export function getInputArr(text) {
   return text.replace(/\n+$/, '').split('\n').map((val) => val.split(/,\s?/));
 }
 
-function Vector(x, y) {
+export function Vector(x, y) {
   this.x = x || 0;
   this.y = y || 0;
 }
 
-function getCodeVector(routeCode) {
+Vector.prototype = {
+  negate: function() {
+    return new Vector(-this.x, -this.y);
+  },
+  add: function(v) {
+    return new Vector(this.x + v.x, this.y + v.y);
+  },
+  subtract: function(v) {
+    return new Vector(this.x - v.x, this.y - v.y);
+  }
+}
+
+export function codeToVector(routeCode) {
   const code = routeCode[0]
-  const length = routeCode.substr(1)
+  const length = parseInt(routeCode.substr(1), 10)
   switch (code) {
     case "U":
       return new Vector(0, length);
@@ -25,17 +37,25 @@ function getCodeVector(routeCode) {
   }
 }
 
-function getVertexCoords(arr) {
-  return arr.reduce((rslt, routeCode, idx, curArr) => {
-    const vector = getCodeVector(routeCode)
-    return rslt;
-  }, [new Vector(0,0)]);
+export function getLocalVectors(codeSet) {
+  return codeSet.map((code) => codeToVector(code)) // turn codes into local vectors
 }
 
-readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
+export function getAbsoluteVectors(vectorSet, startCoords) {
+  return vectorSet.reduce((rslt, vector, idx) => { // convert local vector to absolute vector based on startVector
+      rslt.push(rslt[idx].add(vector))
+      return rslt;
+    }, [ startCoords ])
+}
+
+export function getSolution(err, data) {
   if (err) throw err;
-  const arr = getInputArr(data);
-  const lines = arr.map((routeSet) => getVertexCoords(routeSet))
-  console.log(lines);
+  const codeSets = getInputArr(data);
+  const vectorSets = codeSets.map((codeSet) => getLocalVectors(codeSet))
+  const coordSets = vectorSets.map((vectorSet) => getAbsoluteVectors(vectorSet, new Vector(0,0)))
+  const intersections = vectorSets.map((coordSet, setIdx) => coordSet);
+  console.log(coordSets);
   console.log('[03 - Part 1] Solution:', '');
-});
+}
+
+readFile(join(__dirname, 'input.txt'), 'utf8', getSolution);
