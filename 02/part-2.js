@@ -1,11 +1,11 @@
 import { readFile } from 'fs';
 import { join } from 'path';
 
-function getInputArr(text) {
+export function getInputArr(text) {
   return text.replace(/\n+$/, '').split(/,\s?/).map((str) => parseInt(str, 10));
 }
 
-function computeProgram(arr) {
+export function computeProgram(arr) {
   const prog = [...arr];
   let address = 0;
   while (address < prog.length) {
@@ -26,8 +26,7 @@ function computeProgram(arr) {
   return prog;
 };
 
-
-function findProgramMatch(arr, target) {
+export function findProgramMatch(arr, target) {
   const rangeArr = Array.from({length: 100});
   let rslt;
   rangeArr.some((val, noun) => {
@@ -42,11 +41,12 @@ function findProgramMatch(arr, target) {
   return rslt;
 }
 
-
-readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
+export function getSolution(err, data) {
   if (err) throw err;
   const arr = getInputArr(data);
   const match = findProgramMatch(arr, 19690720)
   const rslt = 100 * match[1] + match[2];
   console.log('[02 - Part 2] Solution:', rslt);
-});
+}
+
+readFile(join(__dirname, 'input.txt'), 'utf8', getSolution);

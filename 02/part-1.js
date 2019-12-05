@@ -1,18 +1,18 @@
 import { readFile } from 'fs';
 import { join } from 'path';
 
-function getInputArr(text) {
+export function getInputArr(text) {
   return text.replace(/\n+$/, '').split(/,\s?/).map((str) => parseInt(str, 10));
 }
 
-function restoreSavedValues(arr){
+export function restoreSavedValues(arr){
   const rslt = [...arr];
   rslt[1] = 12;
   rslt[2] = 2;
   return rslt;
 }
 
-function computeProgram(arr) {
+export function computeProgram(arr) {
   const prog = [...arr];
   let address = 0;
   while (address < prog.length) {
@@ -33,11 +33,13 @@ function computeProgram(arr) {
   return prog;
 };
 
-readFile(join(__dirname, 'input.txt'), 'utf8', (err, data) => {
+export function getSolution(err, data) {
   if (err) throw err;
   const arr = getInputArr(data);
   const arrSavedValues = restoreSavedValues(arr);
   const program = computeProgram(arrSavedValues);
   const rslt = program[0]
   console.log('[02 - Part 1] Solution:', rslt);
-});
+}
+
+readFile(join(__dirname, 'input.txt'), 'utf8', getSolution);
