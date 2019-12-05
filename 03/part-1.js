@@ -9,26 +9,25 @@ export function getInputArr(text) {
     .map((val) => val.split(/,\s?/));
 }
 
-export function Vector(x, y) {
-  this.x = x || 0;
-  this.y = y || 0;
-}
-
-Vector.prototype = {
-  negate: function() {
+export class Vector {
+  constructor (x, y) {
+    this.x = x || 0;
+    this.y = y || 0;
+  }
+  negate () {
     return new Vector(-this.x, -this.y);
-  },
-  add: function(v) {
+  }
+  add (v) {
     return new Vector(this.x + v.x, this.y + v.y);
-  },
-  subtract: function(v) {
+  }
+  subtract (v) {
     return new Vector(this.x - v.x, this.y - v.y);
-  },
-  manhattanDist: function(v) {
+  }
+  manhattanDist (v) {
     const local = this.subtract(v);
     return Math.abs(local.x) + Math.abs(local.y);
   }
-};
+}
 
 export function codeToVector(routeCode) {
   const code = routeCode[0];
