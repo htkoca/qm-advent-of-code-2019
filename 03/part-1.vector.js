@@ -8,6 +8,26 @@ export function getInputArr(text) {
     .map((val) => val.split(/,\s?/));
 }
 
+export class Vector {
+  constructor (x, y) {
+    this.x = x || 0;
+    this.y = y || 0;
+  }
+  add (v) {
+    return new Vector(this.x + v.x, this.y + v.y);
+  }
+  subtract (v) {
+    return new Vector(this.x - v.x, this.y - v.y);
+  }
+  isHorizontal () {
+    return Math.abs(this.x) > Math.abs(this.y);
+  }
+  manhattanDist (v) {
+    const local = this.subtract(v);
+    return Math.abs(local.x) + Math.abs(local.y);
+  }
+}
+
 export function codeToVector(routeCode) {
   const code = routeCode[0];
   const length = parseInt(routeCode.substr(1), 10);
@@ -64,8 +84,13 @@ export function getClosestIntersect(intersects) {
 
 export function getSolution(err, data) {
   if (err) throw err;
+  const startVec = new Vector(0, 0)
   const codeSets = getInputArr(data);
-  const dotSets = getDotSets(codeSets, [0,0]);
+  const lineSets = getLineSets(codeSets, startVec);
+  const xAxisLineSets = getAxisLineSets(lineSets, true);
+  const yAxisLineSets = getAxisLineSets(lineSets, true);
+  const intersects = getIntersects(xAxisLineSets, yAxisLineSets);
+  const closestIntersect = getClosestIntersect(intersects);
   console.log('[03 - Part 1] Solution:', closestIntersect);
 }
 
