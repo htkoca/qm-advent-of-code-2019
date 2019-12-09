@@ -36,16 +36,19 @@ export function getDirectionVector (code) {
 
 export function getCoordSets(cmdSets, startVec) {
   return cmdSets.map((cmdSet) => {
-    let curVec = startVec;
-    return cmdSet.reduce((rslt, cmd) => {
+    const dict = {};
+    let steps = 0;
+    let lastPos = startVec;
+    cmdSet.forEach((cmd) => {
       const vec = getDirectionVector(cmd[0])
       const length = cmd.slice(1);
       Array.from({ length }).forEach(() => {
-        curVec = ( !curVec ? vec : curVec.add(vec));
-        rslt[`${curVec.x}, ${curVec.y}`] = curVec;
+        steps = steps + 1;
+        lastPos = lastPos.add(vec);
+        dict[`${lastPos.x}, ${lastPos.y}`] = { pos: lastPos.add(vec), steps };
       });
-      return rslt;
-    }, {});
+    });
+    return dict;
   });
 }
 
@@ -62,7 +65,7 @@ export function getIntersects(coordSets) {
 
 export function getClosestIntersect(intersects, startVec) {
   return Object.keys(intersects)
-    .map((key) => startVec.manDist(intersects[key]))
+    .map((key) => startVec.manDist(intersects[key].pos))
     .sort((a, b) => a - b )[0];
 };
 
