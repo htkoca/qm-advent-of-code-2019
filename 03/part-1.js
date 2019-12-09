@@ -69,8 +69,8 @@ export function getClosestIntersect(intersects, startVec) {
 export function getSolution(err, data) {
   if (err) throw err;
   const startVec = new Vector(0, 0);
-  const codeSets = getInputArr(data);
-  const coordSets = getCoordSets(codeSets, startVec);
+  const cmdSets = getInputArr(data);
+  const coordSets = getCoordSets(cmdSets, startVec);
   const intersects = getIntersects(coordSets);
   const closestIntersect = getClosestIntersect(intersects, startVec);
   console.log('[03 - Part 1] Solution:', closestIntersect);
