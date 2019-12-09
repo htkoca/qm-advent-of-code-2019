@@ -8,64 +8,71 @@ export function getInputArr(text) {
     .map((val) => val.split(/,\s?/));
 }
 
-export function codeToVector(routeCode) {
-  const code = routeCode[0];
-  const length = parseInt(routeCode.substr(1), 10);
-  switch (code) {
-    case 'U':
-      return new Vector(0, length);
-    case 'D':
-      return new Vector(0, -length);
-    case 'L':
-      return new Vector(-length, 0);
-    case 'R':
-      return new Vector(length, 0);
+export class Vector {
+  constructor (x, y) {
+    this.x = x || 0;
+    this.y = y || 0;
+  }
+  add (v) {
+    return new Vector (this.x + v.x, this.y + v.y);
+  }
+  subtract (v) {
+    return new Vector (this.x - v.x, this.y - v.y);
+  }
+  manDist (v) {
+    const localVec = this.subtract(v);
+    return Math.abs(localVec.x) + Math.abs(localVec.y)
   }
 }
 
-export function getLineSets(codeSets, startVec) {
-  return codeSets.map((codeSet) => {
-    return codeSet.reduce((rslt, code, idx) => {
-      const vector = codeToVector(code);
-      const origin = idx === 0 ? startVec : rsl[itdx-1].origin;
-      const end = origin.add(vector)
-      const isHorizontal = vector.isHorizontal()
-      rslt[idx] = { vector, origin, end, isHorizontal }
+export function getDirectionVector (code) {
+  return { 
+    U: new Vector(0, 1),
+    D: new Vector(0, -1),
+    L: new Vector(-1, 0),
+    R: new Vector(1, 0)
+  }[code]
+}
+
+export function getCoordSets(cmdSets, startVec) {
+  return cmdSets.map((cmdSet) => {
+    let curVec = startVec;
+    return cmdSet.reduce((rslt, cmd) => {
+      const vec = getDirectionVector(cmd[0])
+      const length = cmd.slice(1);
+      Array.from({ length }).forEach(() => {
+        curVec = ( !curVec ? vec : curVec.add(vec));
+        rslt[`${curVec.x}, ${curVec.y}`] = curVec;
+      });
       return rslt;
-    }, []);
+    }, {});
   });
 }
 
-// filter lines by x or y axis line (since lines are 90 degrees only)
-export function getAxisLineSets(lineSets, isHorizontal) {
-  return lineSets.map((lineSet) => lineSet.filter((lineObj) => lineObj.isHorizontal === isHorizontal))
-}
-
-export function checkIntersect(lineObjA, lineObjB) {
-
-}
-
-export function getIntersects(xAxisLineSets, yAxisLineSets) {
-  const intersects = {};
-  xAxisLineSets.forEach((xAxisLineSet) => {
-    xAxisLineSet.forEach((xAxisLineObj) => {
-      yAxisLineSets.forEach((yAxisLineSet) => {
-        yAxisLineSet.forEach((yAxisLineObj) => {
-          // abandoning this solution because it's too expensive. see `part-1.js`
-        })
-      })
-    })
+// currently this only works for 2 wire sets.
+export function getIntersects(coordSets) {
+  const rslt = {};
+  Object.keys(coordSets[0]).forEach((key) => {
+    if(!!coordSets[1][key] && !rslt[key]){
+      rslt[key] = coordSets[0][key];
+    }
   })
+  return rslt;
 }
 
-export function getClosestIntersect(intersects) {
-  // placeholder
-}
+export function getClosestIntersect(intersects, startVec) {
+  return Object.keys(intersects)
+    .map((key) => startVec.manDist(intersects[key]))
+    .sort((a, b) => a - b )[0];
+};
 
 export function getSolution(err, data) {
   if (err) throw err;
+  const startVec = new Vector(0, 0);
   const codeSets = getInputArr(data);
-  const dotSets = getDotSets(codeSets, [0,0]);
+  const coordSets = getCoordSets(codeSets, startVec);
+  const intersects = getIntersects(coordSets);
+  const closestIntersect = getClosestIntersect(intersects, startVec);
   console.log('[03 - Part 1] Solution:', closestIntersect);
 }
 
