@@ -1,6 +1,5 @@
 import { readFile } from 'fs';
 import { join } from 'path';
-import { findSegmentIntersection } from 'line-intersection';
 
 export function getInputArr(text) {
   return text
@@ -14,14 +13,14 @@ export class Vector {
     this.x = x || 0;
     this.y = y || 0;
   }
-  negate () {
-    return new Vector(-this.x, -this.y);
-  }
   add (v) {
     return new Vector(this.x + v.x, this.y + v.y);
   }
   subtract (v) {
     return new Vector(this.x - v.x, this.y - v.y);
+  }
+  isHorizontal () {
+    return Math.abs(this.x) > Math.abs(this.y);
   }
   manhattanDist (v) {
     const local = this.subtract(v);
@@ -44,23 +43,39 @@ export function codeToVector(routeCode) {
   }
 }
 
-// local vectors describe a direction in X,Y from 0,0 (R1000 = X: 1000, Y: 0)
-export function getLocalVectors(codeSets) {
-  return codeSets.map((codeSet) => codeSet.map((code) => codeToVector(code)));
-}
-
-// absolute vectors describe a coord in X, Y
-export function getAbsoluteCoords(vectorSets, startCoords) {
-  return vectorSets.map((vectorSet) => {
-    return vectorSet.reduce((rslt, vector, idx) => {
-      rslt.push(rslt[idx].add(vector));
+export function getLineSets(codeSets, startVec) {
+  return codeSets.map((codeSet) => {
+    return codeSet.reduce((rslt, code, idx) => {
+      const vector = codeToVector(code);
+      const origin = idx === 0 ? startVec : rsl[itdx-1].origin;
+      const end = origin.add(vector)
+      const isHorizontal = vector.isHorizontal()
+      rslt[idx] = { vector, origin, end, isHorizontal }
       return rslt;
-    }, [startCoords]);
+    }, []);
   });
 }
 
-export function getIntersects(coordSets) {
-  // placeholder
+// filter lines by x or y axis line (since lines are 90 degrees only)
+export function getAxisLineSets(lineSets, isHorizontal) {
+  return lineSets.map((lineSet) => lineSet.filter((lineObj) => lineObj.isHorizontal === isHorizontal))
+}
+
+export function checkIntersect(lineObjA, lineObjB) {
+
+}
+
+export function getIntersects(xAxisLineSets, yAxisLineSets) {
+  const intersects = {};
+  xAxisLineSets.forEach((xAxisLineSet) => {
+    xAxisLineSet.forEach((xAxisLineObj) => {
+      yAxisLineSets.forEach((yAxisLineSet) => {
+        yAxisLineSet.forEach((yAxisLineObj) => {
+          // abandoning this solution because it's too expensive. see `part-1.js`
+        })
+      })
+    })
+  })
 }
 
 export function getClosestIntersect(intersects) {
@@ -69,10 +84,12 @@ export function getClosestIntersect(intersects) {
 
 export function getSolution(err, data) {
   if (err) throw err;
+  const startVec = new Vector(0, 0)
   const codeSets = getInputArr(data);
-  const vectorSets = getLocalVectors(codeSets);
-  const coordSets = getAbsoluteCoords(vectorSets, new Vector(0, 0));
-  const intersects = getIntersects(coordSets);
+  const lineSets = getLineSets(codeSets, startVec);
+  const xAxisLineSets = getAxisLineSets(lineSets, true);
+  const yAxisLineSets = getAxisLineSets(lineSets, true);
+  const intersects = getIntersects(xAxisLineSets, yAxisLineSets);
   const closestIntersect = getClosestIntersect(intersects);
   console.log('[03 - Part 1] Solution:', closestIntersect);
 }
